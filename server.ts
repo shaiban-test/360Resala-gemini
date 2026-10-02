@@ -19,6 +19,16 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '10mb' }));
 
+// Healthcheck endpoint for Coolify / Docker monitoring
+app.get('/api/health', (_req, res) => {
+  res.json({
+    status: 'ok',
+    app: 'ChatAndCart AI',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
+
 // Initialize Google Gen AI with server-side API key if present
 let ai: GoogleGenAI | null = null;
 if (process.env.GEMINI_API_KEY) {
