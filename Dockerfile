@@ -3,11 +3,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Ensure devDependencies are installed during build
+ENV NODE_ENV=development
 
-# Copy application files and build
+# Install all dependencies with legacy peer deps to prevent ERESOLVE conflicts
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+# Copy application source and build frontend
 COPY . .
 RUN npm run build
 
@@ -19,11 +22,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Install production dependencies and tsx for TypeScript server execution
-COPY package*.json ./
-RUN npm install --omit=dev && npm install -g tsx
-
-# Copy built assets and server code
+# Copy resolved node_modules and built assets directly from builder
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/server.ts ./
 COPY --from=builder /app/src ./src
@@ -31,7 +32,10 @@ COPY --from=builder /app/index.html ./
 COPY --from=builder /app/metadata.json ./
 COPY --from=builder /app/tsconfig.json ./
 
+# Install tsx globally for fast execution
+RUN npm install -g tsx --legacy-peer-deps
+
 EXPOSE 3000
 
-# Run production server
-CMD ["npx", "tsx", "server.ts"]
+# Start server
+CMD ["tsx", "server.ts"]
