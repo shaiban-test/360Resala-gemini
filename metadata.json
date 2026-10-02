@@ -1,0 +1,6 @@
+{
+  "name": "ChatAndCart AI - منصة التجارة التحادثية والموظف الذكي",
+  "description": "منصة متكاملة للتجارة التحادثية وإدارة الموظف الذكي للرد على استفسارات واتساب، بيع المنتجات وحجز المواعيد بمختلف اللهجات العربية، مع ربط Meta Embedded Signup و QR Code.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
