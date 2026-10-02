@@ -31,11 +31,13 @@ import {
   ExternalLink,
   Activity,
   Layers,
+  Mail,
 } from 'lucide-react';
 import { DIALECTS } from '../data/constants';
 import { DialectCode, CatalogItem, Appointment } from '../types';
 import { PaymentCheckoutModal } from './PaymentCheckoutModal';
 import { WebhookInspectorModal } from './WebhookInspectorModal';
+import { SmtpSettingsView } from './SmtpSettingsView';
 
 export const MerchantDashboard: React.FC = () => {
   const {
@@ -56,7 +58,7 @@ export const MerchantDashboard: React.FC = () => {
   } = useAppStore();
 
   const [activeTab, setActiveTab] = useState<
-    'inbox' | 'appointments' | 'catalog' | 'orders' | 'marketing' | 'payments' | 'channels' | 'analytics'
+    'inbox' | 'appointments' | 'catalog' | 'orders' | 'marketing' | 'payments' | 'smtp' | 'channels' | 'analytics'
   >('inbox');
 
   // Inbox state
@@ -187,6 +189,7 @@ export const MerchantDashboard: React.FC = () => {
             { id: 'marketing', label: 'السلات المتروكة والبرودكاست', icon: <TrendingUp className="w-4 h-4 text-amber-400" /> },
             { id: 'catalog', label: 'المنتجات والخدمات', icon: <ShoppingBag className="w-4 h-4" /> },
             { id: 'payments', label: 'بوابات الدفع (Moyasar/Tap)', icon: <CreditCard className="w-4 h-4 text-teal-400" /> },
+            { id: 'smtp', label: 'البريد و SMTP', icon: <Mail className="w-4 h-4 text-emerald-400" /> },
             { id: 'channels', label: 'قنوات واتساب والربط', icon: <Globe className="w-4 h-4" /> },
             { id: 'analytics', label: 'التقارير والأداء', icon: <TrendingUp className="w-4 h-4" /> },
           ].map((tab) => (
@@ -943,6 +946,13 @@ export const MerchantDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* TAB: SMTP & EMAIL NOTIFICATIONS */}
+        {activeTab === 'smtp' && (
+          <div className="mt-6">
+            <SmtpSettingsView />
           </div>
         )}
 

@@ -29,6 +29,7 @@ import { DIALECTS, SUBSCRIPTION_PLANS } from '../data/constants';
 import { DialectCode } from '../types';
 import { BrandLogo } from './BrandLogo';
 import { WebhookInspectorModal } from './WebhookInspectorModal';
+import { Footer } from './Footer';
 
 export const LandingPage: React.FC = () => {
   const { setView, updateAIEmployee, state } = useAppStore();
@@ -411,16 +412,8 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="py-10 bg-[#04080a] border-t border-slate-900 text-slate-400 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <BrandLogo size="sm" />
-          <div className="flex items-center gap-6">
-            <span>جميع الحقوق محفوظة © 2026 منصة 360Resala</span>
-            <span>Meta Tech Solution Provider</span>
-          </div>
-        </div>
-      </footer>
+      {/* RICH SAAS FOOTER */}
+      <Footer />
 
       {/* Webhook Inspector Modal */}
       <WebhookInspectorModal

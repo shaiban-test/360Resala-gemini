@@ -12,6 +12,8 @@ import {
   Appointment,
   AbandonedCart,
   BroadcastCampaign,
+  SmtpConfig,
+  EmailLogEntry,
 } from '../types';
 
 export const DIALECTS: DialectInfo[] = [
@@ -178,6 +180,51 @@ export const DEFAULT_PAYMENT_CONFIG: PaymentGatewayConfig = {
   enableCreditCard: true,
   enableCashOnDelivery: true,
 };
+
+export const DEFAULT_SMTP_CONFIG: SmtpConfig = {
+  host: 'mail.360services.org',
+  port: 587,
+  encryption: 'tls',
+  username: 'notifications@360services.org',
+  password: '••••••••••••••••',
+  senderName: '360Resala Platform',
+  senderEmail: 'notifications@360services.org',
+  enableSignupVerification: true,
+  enablePasswordReset: true,
+  enablePaymentReceipts: true,
+  status: 'configured',
+  lastTestedAt: new Date().toLocaleDateString('ar-SA'),
+};
+
+export const INITIAL_EMAIL_LOGS: EmailLogEntry[] = [
+  {
+    id: 'email_1',
+    recipient: 'user@example.sa',
+    subject: 'رمز التحقق لتفعيل حسابك في منصة 360Resala',
+    type: 'verification_code',
+    timestamp: 'منذ 15 دقيقة',
+    status: 'delivered',
+    previewText: 'رمز التحقق (OTP) الخاص بك هو: 849201. صالح للاستخدام لمدة 10 دقائق.',
+  },
+  {
+    id: 'email_2',
+    recipient: 'merchant@store.sa',
+    subject: 'طلب إعادة تعيين كلمة المرور - 360Resala',
+    type: 'password_reset',
+    timestamp: 'منذ ساعتين',
+    status: 'delivered',
+    previewText: 'تم طلب إعادة تعيين كلمة المرور لحسابك. اضغط على الرابط الآمن لتعيين كلمة مرور جديدة.',
+  },
+  {
+    id: 'email_3',
+    recipient: 'faisal@client.sa',
+    subject: 'إشعار تأكيد الدفع وفاتورة ضريبية رسمية #RESALA-9182',
+    type: 'payment_receipt',
+    timestamp: 'اليوم، 04:30 م',
+    status: 'delivered',
+    previewText: 'شكراً لتعاملك معنا. تم سداد مبلغ 240 ر.س بنجاح عبر Apple Pay.',
+  },
+];
 
 export const INITIAL_CATALOG_ITEMS: CatalogItem[] = [
   {

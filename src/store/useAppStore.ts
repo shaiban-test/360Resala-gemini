@@ -21,18 +21,22 @@ import {
   AbandonedCart,
   BroadcastCampaign,
   WebhookLogEntry,
+  SmtpConfig,
+  EmailLogEntry,
 } from '../types';
 import {
   DEFAULT_META_CONFIG,
   DEFAULT_PAYMENT_CONFIG,
+  DEFAULT_SMTP_CONFIG,
   INITIAL_CATALOG_ITEMS,
   INITIAL_APPOINTMENTS,
   INITIAL_ABANDONED_CARTS,
   INITIAL_CAMPAIGNS,
+  INITIAL_EMAIL_LOGS,
   DIALECTS,
 } from '../data/constants';
 
-const STORAGE_KEY = '360resala_app_state_v2';
+const STORAGE_KEY = '360resala_app_state_v3';
 
 interface AppState {
   currentView: AppView;
@@ -43,6 +47,8 @@ interface AppState {
   channels: ChannelConnection[];
   metaConfig: MetaTechProviderConfig;
   paymentConfig: PaymentGatewayConfig;
+  smtpConfig: SmtpConfig;
+  emailLogs: EmailLogEntry[];
   orders: OrderBooking[];
   paymentInvoices: PaymentInvoice[];
   appointments: Appointment[];
@@ -154,6 +160,8 @@ const defaultInitialState: AppState = {
   ],
   metaConfig: DEFAULT_META_CONFIG,
   paymentConfig: DEFAULT_PAYMENT_CONFIG,
+  smtpConfig: DEFAULT_SMTP_CONFIG,
+  emailLogs: INITIAL_EMAIL_LOGS,
   orders: [
     {
       id: 'ord_9182',
@@ -384,6 +392,60 @@ export function useAppStore() {
   const updatePaymentConfig = (partial: Partial<PaymentGatewayConfig>) => {
     memoryState.paymentConfig = { ...memoryState.paymentConfig, ...partial };
     emitChange();
+  };
+
+  const updateSmtpConfig = (partial: Partial<SmtpConfig>) => {
+    memoryState.smtpConfig = { ...memoryState.smtpConfig, ...partial };
+    emitChange();
+  };
+
+  const sendTestEmail = async (targetEmail: string) => {
+    const newLog: EmailLogEntry = {
+      id: `email_${Date.now()}`,
+      recipient: targetEmail,
+      subject: `اختبار خادم SMTP - منصة 360Resala`,
+      type: 'test',
+      timestamp: new Date().toLocaleTimeString('ar-SA'),
+      status: 'delivered',
+      previewText: `تم التحقق بنجاح من إعدادات خادم SMTP (${memoryState.smtpConfig.host}:${memoryState.smtpConfig.port}). الخادم جاهز لإرسال الرسائل.`,
+    };
+    memoryState.emailLogs.unshift(newLog);
+    memoryState.smtpConfig.status = 'tested_success';
+    memoryState.smtpConfig.lastTestedAt = new Date().toLocaleDateString('ar-SA');
+    emitChange();
+    return { success: true, message: `تم إرسال بريد الاختبار بنجاح إلى ${targetEmail}` };
+  };
+
+  const sendVerificationOtp = (email: string) => {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const newLog: EmailLogEntry = {
+      id: `email_${Date.now()}`,
+      recipient: email,
+      subject: 'رمز التحقق (OTP) لتفعيل حسابك في 360Resala',
+      type: 'verification_code',
+      timestamp: new Date().toLocaleTimeString('ar-SA'),
+      status: 'delivered',
+      previewText: `رمز التحقق الخاص بك لتفعيل الحساب هو: ${otp} (صالح لمدة 10 دقائق)`,
+    };
+    memoryState.emailLogs.unshift(newLog);
+    emitChange();
+    return otp;
+  };
+
+  const sendPasswordResetEmail = (email: string) => {
+    const resetToken = Math.random().toString(36).substring(2, 10);
+    const newLog: EmailLogEntry = {
+      id: `email_${Date.now()}`,
+      recipient: email,
+      subject: 'رابط إعادة تعيين كلمة المرور - 360Resala',
+      type: 'password_reset',
+      timestamp: new Date().toLocaleTimeString('ar-SA'),
+      status: 'delivered',
+      previewText: `اضغط على الرابط الآمن لإعادة تعيين كلمة مرور حسابك: https://360resala-gemini.free-temp.eu.org/reset-password?token=${resetToken}`,
+    };
+    memoryState.emailLogs.unshift(newLog);
+    emitChange();
+    return true;
   };
 
   // Payment Invoices
@@ -841,6 +903,10 @@ export function useAppStore() {
     updateChannelStatus,
     updateMetaConfig,
     updatePaymentConfig,
+    updateSmtpConfig,
+    sendTestEmail,
+    sendVerificationOtp,
+    sendPasswordResetEmail,
     createPaymentInvoice,
     payInvoice,
     openCheckout,

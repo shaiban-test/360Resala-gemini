@@ -22,6 +22,7 @@ import {
   Lock,
 } from 'lucide-react';
 import { WebhookInspectorModal } from './WebhookInspectorModal';
+import { SmtpSettingsView } from './SmtpSettingsView';
 
 export const SuperAdminView: React.FC = () => {
   const { state, updateMetaConfig, updateAdminCredentials, logoutAdmin, pushToGitHub } = useAppStore();
@@ -556,6 +557,11 @@ export const SuperAdminView: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* SMTP Mail Server Configuration */}
+        <div className="bg-[#0D181A] border border-emerald-950/80 rounded-2xl p-6 shadow-xl">
+          <SmtpSettingsView />
         </div>
 
         {/* Registered Tenants / Merchants Table */}

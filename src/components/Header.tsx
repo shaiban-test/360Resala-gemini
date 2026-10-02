@@ -44,12 +44,6 @@ export const Header: React.FC = () => {
       badge: state.cart.length > 0 ? `${state.cart.length}` : undefined,
     },
     {
-      view: 'super_admin',
-      label: 'لوحة الإدارة (/admin)',
-      icon: <ShieldCheck className="w-4 h-4 text-sky-400" />,
-      path: '/admin',
-    },
-    {
       view: 'plans',
       label: 'الباقات والأسعار',
       icon: <CreditCard className="w-4 h-4" />,

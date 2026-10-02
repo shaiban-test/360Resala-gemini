@@ -140,6 +140,31 @@ export interface PaymentGatewayConfig {
   enableCashOnDelivery: boolean;
 }
 
+export interface SmtpConfig {
+  host: string;
+  port: number;
+  encryption: 'tls' | 'ssl' | 'none';
+  username: string;
+  password: string;
+  senderName: string;
+  senderEmail: string;
+  enableSignupVerification: boolean;
+  enablePasswordReset: boolean;
+  enablePaymentReceipts: boolean;
+  status: 'configured' | 'unconfigured' | 'tested_success';
+  lastTestedAt?: string;
+}
+
+export interface EmailLogEntry {
+  id: string;
+  recipient: string;
+  subject: string;
+  type: 'verification_code' | 'password_reset' | 'payment_receipt' | 'test';
+  timestamp: string;
+  status: 'sent' | 'delivered' | 'failed';
+  previewText: string;
+}
+
 export interface PaymentInvoice {
   id: string;
   orderId: string;
