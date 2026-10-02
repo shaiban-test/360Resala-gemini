@@ -70,7 +70,7 @@ export interface AIEmployeeConfig {
   primaryLanguage: 'ar' | 'en';
   dialect: DialectCode;
   businessDescription: string;
-  goals: string[]; // ['الرد على الأسئلة', 'بيع منتجات', 'استقبال طلبات', 'حجز مواعيد', 'جمع عملاء محتملين', 'خدمة العملاء', 'التحويل للموظف']
+  goals: string[];
   tone: 'friendly' | 'professional' | 'sales_driven';
   welcomeMessage: string;
   humanHandoffCondition: string;
@@ -106,6 +106,7 @@ export interface ChannelConnection {
   status: 'disconnected' | 'connecting' | 'connected' | 'error';
   phoneNumber?: string;
   wabaId?: string;
+  phoneNumberId?: string;
   businessName?: string;
   connectedAt?: string;
   qrCodeData?: string;
@@ -123,6 +124,93 @@ export interface MetaTechProviderConfig {
   businessManagerId: string;
   partnerName: string;
   status: 'connected' | 'pending_verification' | 'needs_setup';
+}
+
+export interface PaymentGatewayConfig {
+  activeProvider: 'moyasar' | 'tap' | 'hyperpay';
+  moyasarSecretKey: string;
+  moyasarPublishableKey: string;
+  tapSecretKey: string;
+  tapPublicKey: string;
+  hyperpayEntityId: string;
+  isTestMode: boolean;
+  enableMada: boolean;
+  enableApplePay: boolean;
+  enableCreditCard: boolean;
+  enableCashOnDelivery: boolean;
+}
+
+export interface PaymentInvoice {
+  id: string;
+  orderId: string;
+  amount: number;
+  currency: string;
+  customerName: string;
+  customerPhone: string;
+  status: 'pending' | 'paid' | 'failed' | 'expired';
+  paymentUrl: string;
+  gateway: 'moyasar' | 'tap' | 'hyperpay';
+  paymentMethod?: 'mada' | 'apple_pay' | 'credit_card' | 'cod';
+  paidAt?: string;
+  createdAt: string;
+}
+
+export interface Appointment {
+  id: string;
+  serviceId?: string;
+  serviceName: string;
+  customerName: string;
+  customerPhone: string;
+  date: string;
+  timeSlot: string;
+  staffName?: string;
+  status: 'confirmed' | 'pending' | 'completed' | 'cancelled';
+  notes?: string;
+  reminder24hSent: boolean;
+  reminder2hSent: boolean;
+  createdAt: string;
+}
+
+export interface AbandonedCart {
+  id: string;
+  customerName: string;
+  customerPhone: string;
+  items: CartItem[];
+  total: number;
+  currency: string;
+  abandonedAt: string;
+  recoveryStatus: 'pending' | 'sent' | 'recovered';
+  couponCode?: string;
+  lastReminderSentAt?: string;
+}
+
+export interface BroadcastCampaign {
+  id: string;
+  title: string;
+  targetAudience: 'all' | 'repeat_buyers' | 'inactive_30d' | 'abandoned_carts';
+  messageTemplate: string;
+  mediaUrl?: string;
+  buttonLabel?: string;
+  buttonUrl?: string;
+  status: 'draft' | 'sending' | 'completed';
+  scheduledDate?: string;
+  totalRecipients: number;
+  sentCount: number;
+  deliveredCount: number;
+  readCount: number;
+  createdAt: string;
+}
+
+export interface WebhookLogEntry {
+  id: string;
+  timestamp: string;
+  direction: 'inbound' | 'outbound';
+  type: 'message' | 'status_update' | 'payment_callback';
+  senderPhone?: string;
+  recipientPhone?: string;
+  content: string;
+  rawPayload: any;
+  status: 'success' | 'failed' | 'simulated';
 }
 
 export interface CartItem {
@@ -155,6 +243,7 @@ export interface OrderBooking {
   currency: string;
   status: 'new' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
   paymentStatus: 'paid' | 'unpaid' | 'cod';
+  paymentMethod?: 'mada' | 'apple_pay' | 'credit_card' | 'cod';
   bookingDate?: string;
   bookingTime?: string;
   address?: string;
@@ -167,4 +256,5 @@ export type AppView =
   | 'merchant_dashboard'
   | 'super_admin'
   | 'storefront_chat'
-  | 'plans';
+  | 'plans'
+  | 'checkout';

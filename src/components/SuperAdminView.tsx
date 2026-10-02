@@ -21,6 +21,7 @@ import {
   Code2,
   Lock,
 } from 'lucide-react';
+import { WebhookInspectorModal } from './WebhookInspectorModal';
 
 export const SuperAdminView: React.FC = () => {
   const { state, updateMetaConfig, updateAdminCredentials, logoutAdmin, pushToGitHub } = useAppStore();
@@ -31,9 +32,10 @@ export const SuperAdminView: React.FC = () => {
 
   // GitHub Push State
   const [githubToken, setGithubToken] = useState('');
-  const [githubRepoUrl, setGithubRepoUrl] = useState('https://github.com/shaiban-test/Chatapp.git');
+  const [githubRepoUrl, setGithubRepoUrl] = useState('https://github.com/shaiban-test/360Resala-gemini.git');
   const [isPushingGit, setIsPushingGit] = useState(false);
   const [gitPushResult, setGitPushResult] = useState<{ success: boolean; message: string; output?: string } | null>(null);
+  const [isWebhookModalOpen, setIsWebhookModalOpen] = useState(false);
 
   // Admin Credentials State
   const [newUsername, setNewUsername] = useState(state.adminCredentials.username);
@@ -144,6 +146,14 @@ export const SuperAdminView: React.FC = () => {
             </button>
 
             <button
+              onClick={() => setIsWebhookModalOpen(true)}
+              className="px-4 py-2 bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 font-semibold text-xs rounded-xl transition-colors flex items-center gap-2"
+            >
+              <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <span>فاحص الويب هوك المباشر</span>
+            </button>
+
+            <button
               onClick={logoutAdmin}
               className="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 font-semibold text-xs rounded-xl transition-colors"
             >
@@ -152,7 +162,7 @@ export const SuperAdminView: React.FC = () => {
           </div>
         </div>
 
-        {/* GITHUB REPOSITORY SYNC SECTION (Chatapp Repository) */}
+        {/* GITHUB REPOSITORY SYNC SECTION */}
         <div className="p-6 rounded-2xl bg-[#0D181A] border border-emerald-500/40 shadow-xl space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -161,15 +171,15 @@ export const SuperAdminView: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-bold text-base text-white">
-                  مزامنة ونقل الملفات إلى GitHub (shaiban-test/Chatapp)
+                  مزامنة ونقل الملفات إلى GitHub (shaiban-test/360Resala-gemini)
                 </h3>
                 <p className="text-xs text-slate-400">
-                  المستودع الهدف: <span className="font-mono text-emerald-400">https://github.com/shaiban-test/Chatapp.git</span>
+                  المستودع الهدف: <span className="font-mono text-emerald-400">https://github.com/shaiban-test/360Resala-gemini.git</span>
                 </p>
               </div>
             </div>
             <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-              جاهز للرفع
+              جاهز للرفع والمزامنة
             </span>
           </div>
 
@@ -638,6 +648,11 @@ export const SuperAdminView: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <WebhookInspectorModal
+        isOpen={isWebhookModalOpen}
+        onClose={() => setIsWebhookModalOpen(false)}
+      />
     </div>
   );
 };

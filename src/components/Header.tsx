@@ -6,14 +6,14 @@
 import React from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { AppView } from '../types';
+import { BrandLogo } from './BrandLogo';
 import {
-  MessageSquareCode,
   Sparkles,
   LayoutDashboard,
   ShieldCheck,
   CreditCard,
   MessageCircle,
-  ExternalLink,
+  Activity,
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -28,7 +28,7 @@ export const Header: React.FC = () => {
     },
     {
       view: 'onboarding',
-      label: 'معالج الموظف الذكي',
+      label: 'معالج الإعداد',
       icon: <Sparkles className="w-4 h-4 text-teal-400" />,
       badge: state.onboardingStep < 4 ? `خطوة ${state.onboardingStep}/4` : undefined,
     },
@@ -51,7 +51,7 @@ export const Header: React.FC = () => {
     },
     {
       view: 'plans',
-      label: 'الخطط والاشتراكات',
+      label: 'الباقات والأسعار',
       icon: <CreditCard className="w-4 h-4" />,
     },
   ];
@@ -64,30 +64,15 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#0B1416]/95 backdrop-blur-md border-b border-emerald-950/40 text-slate-100">
+    <header className="sticky top-0 z-40 bg-[#050B0D]/95 backdrop-blur-md border-b border-emerald-950/40 text-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Zone 1: Single element Brand Wordmark */}
+        {/* Zone 1: Official 360Resala Brand Logo */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => handleNavClick('landing', '/')}
-            className="flex items-center gap-2.5 text-right group focus:outline-none"
+            className="focus:outline-none transition-transform hover:opacity-95"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-              <MessageSquareCode className="w-5 h-5 text-slate-950 stroke-[2.5]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-emerald-200 bg-clip-text text-transparent">
-                  Chat&Cart
-                </span>
-                <span className="text-[10px] font-semibold tracking-wider px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase">
-                  AI
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 leading-none">
-                التجارة التحادثية والموظف الذكي
-              </p>
-            </div>
+            <BrandLogo size="md" />
           </button>
         </div>
 
@@ -99,7 +84,7 @@ export const Header: React.FC = () => {
               <button
                 key={link.view}
                 onClick={() => handleNavClick(link.view, link.path)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs lg:text-sm font-medium transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs lg:text-sm font-medium transition-all whitespace-nowrap ${
                   isActive
                     ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 shadow-sm'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
@@ -117,32 +102,20 @@ export const Header: React.FC = () => {
           })}
         </nav>
 
-        {/* Zone 3: Primary Actions and Quick Status */}
+        {/* Zone 3: Primary Actions and Live Status */}
         <div className="flex items-center gap-2 sm:gap-3">
+          <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-500/20 text-[11px] text-emerald-300">
+            <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+            <span>Webhook: متصل ومفعل</span>
+          </div>
+
           <button
             onClick={() => setView('storefront_chat')}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-xs hover:bg-emerald-400 transition-colors shadow-md shadow-emerald-500/20 whitespace-nowrap"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-bold text-xs hover:brightness-110 transition-all shadow-md shadow-emerald-500/20 whitespace-nowrap"
           >
             <MessageCircle className="w-3.5 h-3.5 fill-current" />
             <span>تجربة الشات المباشر</span>
-            <ExternalLink className="w-3 h-3 opacity-70" />
           </button>
-
-          <div className="hidden sm:flex items-center gap-2 border-r border-slate-800 pr-3 mr-1">
-            <div className="text-left text-xs">
-              <div className="font-semibold text-slate-200 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>{state.merchant.businessName}</span>
-              </div>
-              <div className="text-[10px] text-slate-400">
-                {state.merchant.currentPlanId === 'trial'
-                  ? 'باقة تجريبية (14 يوم)'
-                  : state.merchant.currentPlanId === 'pro'
-                  ? 'باقة النمو Pro'
-                  : 'باقة مخصصة'}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </header>

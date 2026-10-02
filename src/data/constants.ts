@@ -3,7 +3,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { DialectInfo, SubscriptionPlan, MetaTechProviderConfig, CatalogItem } from '../types';
+import {
+  DialectInfo,
+  SubscriptionPlan,
+  MetaTechProviderConfig,
+  CatalogItem,
+  PaymentGatewayConfig,
+  Appointment,
+  AbandonedCart,
+  BroadcastCampaign,
+} from '../types';
 
 export const DIALECTS: DialectInfo[] = [
   { code: 'sa', country: 'السعودية', flag: '🇸🇦', label: 'سعودية (نجدي/حجازي)', sampleGreeting: 'يا هلا والله! آمرني وش في خاطرك اليوم؟' },
@@ -55,14 +64,14 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     nameAr: 'تجربة مجانية',
     priceMonthly: 0,
     currency: 'ر.س',
-    descriptionAr: 'جرّب موظفك الذكي لمدة 14 يوماً مع كافة الميزات الأساسية دون الحاجة لبطاقة ائتمانية.',
+    descriptionAr: 'جرّب موظف 360Resala الذكي لمدة 14 يوماً مع كافة الميزات الأساسية دون الحاجة لبطاقة ائتمانية.',
     features: [
       'حتى 100 محادثة ذكية شهرياً',
-      'إعداد موظف ذكي واحد',
+      'إعداد موظف ذكي واحد مخصص',
       'دعم كافة اللهجات العربية والإنجليزية',
       'ربط واتساب عبر QR Code الفوري',
       'سلة الشراء المدمجة وحجز المواعيد',
-      'لوحة تحكم وإدارة الطلبات',
+      'لوحة تحكم وإدارة المبيعات',
     ],
     maxConversations: 100,
     maxProducts: 20,
@@ -77,15 +86,15 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     nameAr: 'باقة البداية',
     priceMonthly: 199,
     currency: 'ر.س',
-    descriptionAr: 'مثالية للمتاجر الناشئة ومقدمي الخدمات لتمكين الرد الآلي والمبيعات المباشرة.',
+    descriptionAr: 'مثالية للأنشطة الناشئة لتمكين الرد الآلي المباشر ومبيعات الواتساب الفورية.',
     features: [
       'حتى 1,500 محادثة ذكية شهرياً',
-      'موظف ذكي واحد مخصص لنشاطك',
-      'ربط واتساب عبر QR Code و Meta Embedded',
+      'موظف ذكي واحد متكامل',
+      'ربط واتساب عبر QR Code و Meta Cloud API',
       'إدارة حتى 100 منتج أو خدمة',
-      'التدخل البشري اللحظي (Human Takeover)',
-      'سلة تسوق ورابط دفع سريع',
-      'دعم فني عبر واتساب',
+      'روابط دفع سريعة لـ مدى و Apple Pay',
+      'نظام حجز وتأكيد المواعيد آلياً',
+      'دعم فني متخصص عبر واتساب',
     ],
     maxConversations: 1500,
     maxProducts: 100,
@@ -101,16 +110,16 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     badge: 'الأكثر طلباً وموصى بها',
     priceMonthly: 399,
     currency: 'ر.س',
-    descriptionAr: 'للأنشطة والمتاجر المتنامية مع ربط كامل لبرنامج مزودي حلول ميتا (Meta Tech Provider).',
+    descriptionAr: 'للأنشطة والمتاجر المتنامية مع ربط رسمي عبر موفري خدمات ميتا (Meta Tech Provider).',
     features: [
       'حتى 6,000 محادثة ذكية شهرياً',
       '3 موظفين أذكياء لفرق متعددة',
       'ربط رسمي عبر Meta Embedded Signup + QR Code',
       'حساب WABA رسمي دون قيود الحظر',
-      'منتجات وخدمات غير محدودة',
-      'تحليلات متقدمة لمعدل التحويل وسلات الشراء',
-      'قوالب رسائل ترويجية واستعادة السلات المتروكة',
-      'دعم على مدار الساعة مع مدير حساب',
+      'منتجات وخدمات غير محدودة وحجوزات متزامنة',
+      'محرك استعادة السلات المتروكة آلياً',
+      'حملات البث والرسائل الترويجية المجدولة',
+      'ربط بوابات الدفع Moyasar و Tap و HyperPay',
     ],
     maxConversations: 6000,
     maxProducts: 9999,
@@ -128,11 +137,11 @@ export const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     descriptionAr: 'حل مخصص مع تكامل برمجي (Custom Webhooks & CRM) ومحادثات غير محدودة.',
     features: [
       'محادثات ذكية غير محدودة',
-      'عدد غير محدود من الموظفين والأرقام',
+      'أرقام وموظفون غير محدودين',
       'ربط متعدد لقنوات WhatsApp, Instagram, Messenger',
-      'تدريب الذكاء الاصطناعي على وثائق وكتالوجات ضخمة',
-      'ربط مباشر مع أنظمة سلة، زد، وشوبيفاي',
-      'SLA رسمي وضمان وقت تشغيل 99.9%',
+      'تدريب الذكاء الاصطناعي على وثائق ومخزون ضخم',
+      'تكامل مخصص مع أنظمة ERP وسلة وزد وشوبيفاي',
+      'SLA رسمي وضمان تشغيل 99.9% مع مدير حساب خاص',
     ],
     maxConversations: 999999,
     maxProducts: 99999,
@@ -148,12 +157,26 @@ export const DEFAULT_META_CONFIG: MetaTechProviderConfig = {
   appSecret: '9b7f8e32c0194a8d8e5b6103e91a0c71',
   embeddedSignupConfigId: '298172640192837',
   systemUserToken: 'EAAGNo...v24.0...MetaPartnerToken',
-  webhookCallbackUrl: 'https://ais-dev-allkasg3smz45vo2p3sqja-243578265646.us-west1.run.app/api/webhooks/whatsapp',
-  webhookVerifyToken: 'chat_and_cart_meta_verify_secret_2026',
+  webhookCallbackUrl: 'https://360resala-gemini.free-temp.eu.org/api/webhooks/whatsapp',
+  webhookVerifyToken: '360resala_secret_token_2026',
   isVerifiedTechProvider: true,
   businessManagerId: 'BM_9018273641',
-  partnerName: 'ChatAndCart Solutions (Meta Business Solution Provider)',
+  partnerName: '360Resala Platform (Meta Business Solution Provider)',
   status: 'connected',
+};
+
+export const DEFAULT_PAYMENT_CONFIG: PaymentGatewayConfig = {
+  activeProvider: 'moyasar',
+  moyasarSecretKey: 'sk_test_360resala_secret_key',
+  moyasarPublishableKey: 'pk_test_360resala_public_key',
+  tapSecretKey: 'sk_test_tap_360resala_key',
+  tapPublicKey: 'pk_test_tap_360resala_pub',
+  hyperpayEntityId: '8a8294174d05c237014d05c879e00b3e',
+  isTestMode: true,
+  enableMada: true,
+  enableApplePay: true,
+  enableCreditCard: true,
+  enableCashOnDelivery: true,
 };
 
 export const INITIAL_CATALOG_ITEMS: CatalogItem[] = [
@@ -206,5 +229,103 @@ export const INITIAL_CATALOG_ITEMS: CatalogItem[] = [
     description: 'ثبات يدوم 48 ساعة بمزيج أصيل من دهن العود الكمبودي الفاخر والورد الطائفي ونفحات العنبر.',
     coverageAreas: 'شحن لجميع مناطق المملكة والخليج خلال 2-4 أيام',
     inStock: true,
+  },
+  {
+    id: 'item-4',
+    merchantId: 'm-1',
+    name: 'معطر جو وفراش ملكي لافندر وعنبر (500 مل)',
+    type: 'product',
+    pricingType: 'fixed',
+    price: 85,
+    currency: 'SAR',
+    description: 'تركيبة تدوم طويلاً لتعطير المفارش والمجالس والستائر مع تقنية إزالة الروائح الكريهة.',
+    coverageAreas: 'شحن فوري داخل المملكة',
+    inStock: true,
+  },
+];
+
+export const INITIAL_APPOINTMENTS: Appointment[] = [
+  {
+    id: 'app_1',
+    serviceName: 'باقة تنظيف المنازل المتكاملة (4 ساعات)',
+    customerName: 'فيصل الشمري',
+    customerPhone: '+966 50 123 4567',
+    date: '2026-10-04',
+    timeSlot: '04:00 م',
+    staffName: 'فريق الخدمة أ',
+    status: 'confirmed',
+    notes: 'يرجى التركيز على المطبخ وغرفة المعيشة',
+    reminder24hSent: true,
+    reminder2hSent: false,
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: 'app_2',
+    serviceName: 'غسيل وتلميع سيارات متنقل VIP',
+    customerName: 'محمد القحطاني',
+    customerPhone: '+966 55 432 1098',
+    date: '2026-10-05',
+    timeSlot: '11:00 ص',
+    staffName: 'كابتن عبد الله',
+    status: 'pending',
+    notes: 'السيارة لكزس بيضاء - حي الصحافة',
+    reminder24hSent: false,
+    reminder2hSent: false,
+    createdAt: new Date().toISOString(),
+  },
+];
+
+export const INITIAL_ABANDONED_CARTS: AbandonedCart[] = [
+  {
+    id: 'cart_ab_1',
+    customerName: 'ريما العتيبي',
+    customerPhone: '+966 54 321 9876',
+    items: [
+      {
+        item: INITIAL_CATALOG_ITEMS[2],
+        quantity: 1,
+      },
+    ],
+    total: 290,
+    currency: 'SAR',
+    abandonedAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+    recoveryStatus: 'pending',
+    couponCode: 'RESALA10',
+  },
+  {
+    id: 'cart_ab_2',
+    customerName: 'سلطان الدوسري',
+    customerPhone: '+966 56 789 0123',
+    items: [
+      {
+        item: INITIAL_CATALOG_ITEMS[0],
+        quantity: 1,
+      },
+      {
+        item: INITIAL_CATALOG_ITEMS[3],
+        quantity: 2,
+      },
+    ],
+    total: 410,
+    currency: 'SAR',
+    abandonedAt: new Date(Date.now() - 3600000 * 18).toISOString(),
+    recoveryStatus: 'sent',
+    couponCode: 'RESALA10',
+    lastReminderSentAt: new Date(Date.now() - 3600000 * 2).toISOString(),
+  },
+];
+
+export const INITIAL_CAMPAIGNS: BroadcastCampaign[] = [
+  {
+    id: 'camp_1',
+    title: 'عرض الجمعة الذهبية: خصم 25% على باقات التنظيف',
+    targetAudience: 'all',
+    messageTemplate: 'يا هلا بك! عروض الجمعة بدأت في 360services 🌟 احجز باقة تنظيف منزلك الآن بخصم 25% مع كود FRIDAY25 عبر الرابط التالي: https://360resala-gemini.free-temp.eu.org',
+    status: 'completed',
+    totalRecipients: 450,
+    sentCount: 450,
+    deliveredCount: 442,
+    readCount: 388,
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
   },
 ];
