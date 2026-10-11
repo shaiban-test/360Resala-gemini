@@ -9,6 +9,7 @@ import { Header } from './components/Header';
 import { LandingPage } from './components/LandingPage';
 import { OnboardingWizard } from './components/OnboardingWizard';
 import { MerchantDashboard } from './components/MerchantDashboard';
+import { MerchantAuthView } from './components/MerchantAuthView';
 import { SuperAdminView } from './components/SuperAdminView';
 import { AdminLogin } from './components/AdminLogin';
 import { PlansView } from './components/PlansView';
@@ -23,8 +24,12 @@ export default function App() {
       const path = window.location.pathname;
       if (path === '/admin' || path.startsWith('/admin/')) {
         setView('super_admin');
-      } else if (path === '/' && state.currentView === 'super_admin') {
-        // stay unless clicked
+      } else if (path === '/merchant' || path === '/dashboard') {
+        if (!state.isMerchantAuthenticated) {
+          setView('merchant_auth');
+        } else {
+          setView('merchant_dashboard');
+        }
       }
     };
 
@@ -42,7 +47,10 @@ export default function App() {
       <main className="flex-1">
         {state.currentView === 'landing' && <LandingPage />}
         {state.currentView === 'onboarding' && <OnboardingWizard />}
-        {state.currentView === 'merchant_dashboard' && <MerchantDashboard />}
+        {state.currentView === 'merchant_auth' && <MerchantAuthView />}
+        {state.currentView === 'merchant_dashboard' && (
+          state.isMerchantAuthenticated ? <MerchantDashboard /> : <MerchantAuthView />
+        )}
         {state.currentView === 'super_admin' && (
           state.isAdminAuthenticated ? <SuperAdminView /> : <AdminLogin />
         )}

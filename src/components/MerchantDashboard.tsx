@@ -32,12 +32,15 @@ import {
   Activity,
   Layers,
   Mail,
+  FileText,
+  LogOut,
 } from 'lucide-react';
 import { DIALECTS } from '../data/constants';
 import { DialectCode, CatalogItem, Appointment } from '../types';
 import { PaymentCheckoutModal } from './PaymentCheckoutModal';
 import { WebhookInspectorModal } from './WebhookInspectorModal';
 import { SmtpSettingsView } from './SmtpSettingsView';
+import { GoogleDocsManager } from './GoogleDocsManager';
 
 export const MerchantDashboard: React.FC = () => {
   const {
@@ -55,10 +58,11 @@ export const MerchantDashboard: React.FC = () => {
     sendBroadcastCampaign,
     updatePaymentConfig,
     createPaymentInvoice,
+    logoutMerchant,
   } = useAppStore();
 
   const [activeTab, setActiveTab] = useState<
-    'inbox' | 'appointments' | 'catalog' | 'orders' | 'marketing' | 'payments' | 'smtp' | 'channels' | 'analytics'
+    'inbox' | 'appointments' | 'catalog' | 'orders' | 'marketing' | 'payments' | 'docs' | 'smtp' | 'channels' | 'analytics'
   >('inbox');
 
   // Inbox state
@@ -189,6 +193,7 @@ export const MerchantDashboard: React.FC = () => {
             { id: 'marketing', label: 'السلات المتروكة والبرودكاست', icon: <TrendingUp className="w-4 h-4 text-amber-400" /> },
             { id: 'catalog', label: 'المنتجات والخدمات', icon: <ShoppingBag className="w-4 h-4" /> },
             { id: 'payments', label: 'بوابات الدفع (Moyasar/Tap)', icon: <CreditCard className="w-4 h-4 text-teal-400" /> },
+            { id: 'docs', label: 'مستندات Google Docs', icon: <FileText className="w-4 h-4 text-blue-400" /> },
             { id: 'smtp', label: 'البريد و SMTP', icon: <Mail className="w-4 h-4 text-emerald-400" /> },
             { id: 'channels', label: 'قنوات واتساب والربط', icon: <Globe className="w-4 h-4" /> },
             { id: 'analytics', label: 'التقارير والأداء', icon: <TrendingUp className="w-4 h-4" /> },
@@ -525,9 +530,19 @@ export const MerchantDashboard: React.FC = () => {
         {/* TAB 3: ORDERS & PAYMENT INVOICES */}
         {activeTab === 'orders' && (
           <div className="mt-6 space-y-6 text-right">
-            <div>
-              <h2 className="text-xl font-bold text-white">الطلبات وفواتير الدفع المباشر</h2>
-              <p className="text-xs text-slate-400">إدارة فواتير مدى و Apple Pay الصادرة آلياً عبر محادثات واتساب</p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-bold text-white">الطلبات وفواتير الدفع المباشر</h2>
+                <p className="text-xs text-slate-400">إدارة فواتير مدى و Apple Pay الصادرة آلياً عبر محادثات واتساب</p>
+              </div>
+
+              <button
+                onClick={() => setActiveTab('docs')}
+                className="self-start sm:self-auto px-4 py-2 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/30 text-blue-300 font-bold text-xs flex items-center gap-2 transition-all shadow-sm"
+              >
+                <FileText className="w-4 h-4 text-blue-400" />
+                <span>تصدير ومزامنة مع Google Docs</span>
+              </button>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -946,6 +961,13 @@ export const MerchantDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* TAB: GOOGLE DOCS & DRIVE */}
+        {activeTab === 'docs' && (
+          <div className="mt-6">
+            <GoogleDocsManager />
           </div>
         )}
 

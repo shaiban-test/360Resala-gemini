@@ -60,6 +60,7 @@ interface AppState {
   chatMessages: ChatMessage[];
   isHumanTakeover: boolean;
   isAdminAuthenticated: boolean;
+  isMerchantAuthenticated: boolean;
   adminCredentials: {
     username: string;
     passwordHash: string;
@@ -79,6 +80,7 @@ const defaultInitialState: AppState = {
       : 'landing',
   onboardingStep: 1,
   isAdminAuthenticated: false,
+  isMerchantAuthenticated: false,
   adminCredentials: {
     username: 'admin',
     passwordHash: 'admin123456',
@@ -873,6 +875,45 @@ export function useAppStore() {
     emitChange();
   };
 
+  const loginMerchant = (emailOrPhone: string, _password?: string) => {
+    memoryState.isMerchantAuthenticated = true;
+    if (emailOrPhone.includes('@')) {
+      memoryState.merchant.email = emailOrPhone;
+    } else {
+      memoryState.merchant.phone = emailOrPhone;
+    }
+    memoryState.currentView = 'merchant_dashboard';
+    emitChange();
+    return true;
+  };
+
+  const registerMerchant = (profile: {
+    businessName: string;
+    ownerName: string;
+    email: string;
+    phone: string;
+    natureOfBusiness: 'products' | 'services' | 'both';
+  }) => {
+    memoryState.merchant = {
+      ...memoryState.merchant,
+      businessName: profile.businessName,
+      ownerName: profile.ownerName,
+      email: profile.email,
+      phone: profile.phone,
+      natureOfBusiness: profile.natureOfBusiness,
+    };
+    memoryState.isMerchantAuthenticated = true;
+    memoryState.currentView = 'merchant_dashboard';
+    emitChange();
+    return true;
+  };
+
+  const logoutMerchant = () => {
+    memoryState.isMerchantAuthenticated = false;
+    memoryState.currentView = 'landing';
+    emitChange();
+  };
+
   const pushToGitHub = async (
     token: string,
     repoUrl = 'https://github.com/shaiban-test/360Resala-gemini.git'
@@ -930,6 +971,9 @@ export function useAppStore() {
     toggleHumanTakeover,
     loginAdmin,
     logoutAdmin,
+    loginMerchant,
+    registerMerchant,
+    logoutMerchant,
     updateAdminCredentials,
     pushToGitHub,
     resetStore,

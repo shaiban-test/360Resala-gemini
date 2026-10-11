@@ -53,6 +53,7 @@ export interface MerchantProfile {
   businessName: string;
   ownerName: string;
   email: string;
+  phone?: string;
   country: string;
   currency: string;
   timezone: string;
@@ -60,6 +61,15 @@ export interface MerchantProfile {
   selectedCategories: string[];
   currentPlanId: 'trial' | 'starter' | 'pro' | 'enterprise';
   createdAt: string;
+}
+
+export interface GoogleDocReport {
+  id: string;
+  title: string;
+  documentId: string;
+  url: string;
+  createdAt: string;
+  type: 'orders_report' | 'catalog_export' | 'faqs_training';
 }
 
 export interface AIEmployeeConfig {
@@ -279,6 +289,7 @@ export type AppView =
   | 'landing'
   | 'onboarding'
   | 'merchant_dashboard'
+  | 'merchant_auth'
   | 'super_admin'
   | 'storefront_chat'
   | 'plans'
